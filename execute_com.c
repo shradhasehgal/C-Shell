@@ -1,10 +1,8 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "headers.h"
 #include "pwd.c"
-
-#define EXIT_SUCCESS 0
+#include "cd.c"
+#include "echo.c"
+#include "ls.c"
 
 void execute_com(char *command)
 {
@@ -15,8 +13,12 @@ void execute_com(char *command)
     else if(strcmp(command, "pwd") == 0)
         pwd();
 
-    else if(strcmp(command, "ls")==0)
-        ls();
-    
-    
+    else if(strcmp(command, "cd")==0)
+        cd(command);
+
+    else if(strcmp(command, "echo")==0)
+        echo(command);
+
+    else if(strcmp(command, "ls") == 0)
+        ls(command);
 }

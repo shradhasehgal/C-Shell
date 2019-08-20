@@ -1,14 +1,5 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
+#include "headers.h"
 #include "execute_com.c"
-
-#define EXIT_FAILURE 1
-
-// Global variables
-char HOST[256], USER[256], CWD[2048], HOME[2048];
-int no;
 
 char *get_input()
 {
