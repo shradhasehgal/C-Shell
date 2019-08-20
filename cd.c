@@ -13,18 +13,20 @@ void cd(char *command)
     {   
         int n = strlen(token);
         char *temp = (char *)malloc(sizeof(char) *n);
-        strcpy(temp, "");
+        strcpy(temp,"\0");
+        int i=0;
         if(n > 1)
         {
-            for(int i=1; i < n; i++)
-            temp[i-1] = token[i];
+            for(i=1; i < n; i++)
+                temp[i-1] = token[i];
         }
+        temp[i] ='\0';
         
         char *final_path = (char *)malloc(sizeof(char) *(n + strlen(HOME)));
         strcpy(final_path, HOME);
         strcat(final_path, temp);
+        final_path[n +strlen(HOME)-1] ='\0';
         free(temp);
-        printf("%s\n", final_path);
         if(chdir(final_path) != 0) 
             perror("Error");
 

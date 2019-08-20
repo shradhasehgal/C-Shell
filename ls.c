@@ -9,7 +9,7 @@ int is_hidden(char *filename)
 
 void long_listing(char *directory, char *filename)
 {
-    char *filepath = (char *)malloc(sizeof(char) * (strlen(directory) + strlen(filename)+1));
+    char *filepath = (char *)malloc(sizeof(char) * (strlen(directory) + strlen(filename)+10));
     strcpy(filepath, directory);
     strcat(filepath, "/");
     strcat(filepath, filename);
@@ -50,12 +50,9 @@ void long_listing(char *directory, char *filename)
         strftime(time, 50, "%b  %d %H:%M", localtime( &name.st_mtime));
         printf("%s\t%ld\t%s\t%s\t%ld\t %s\t%s\n", perms, name.st_nlink, pw->pw_name,gr->gr_name, name.st_size, time, filename);
         free(perms);
-        free(time);
-        //free(sho);
     }
    
     free(filepath);
-
 }
 
 void ls_out(char *dir_name, int flag, int hidden)
@@ -74,10 +71,14 @@ void ls_out(char *dir_name, int flag, int hidden)
             for(int i=0; i<n; i++) 
             { 
                 if(hidden == 0 && !is_hidden(file[i]->d_name) || hidden == 1)
-                    printf("%s\t",file[i]->d_name); 
-                free(file[i]); 
+                {
+                    free(file[i]);
+                    printf("%s\t",file[i]->d_name);  
+                }
             }
+
             printf("\n");
+        
             free(file);
             break;
     
@@ -89,6 +90,7 @@ void ls_out(char *dir_name, int flag, int hidden)
                     long_listing(dir_name, file[i]->d_name);
                 free(file[i]);
             }
+            free(file);
             break;
     }
     
@@ -121,26 +123,32 @@ void ls(char *command)
         {
             y = 1;
             char *final_path;
+            int n = strlen(token);
+            char *temp = (char *)malloc(sizeof(char) *n +1);
+            temp[n] ='\0';
             if(token[0] == '~')
             {
-                int n = strlen(token);
-                char *temp = (char *)malloc(sizeof(char) *n);
-                strcpy(temp, "");
                 if(n > 1)
                 {
                     for(int i=1; i < n; i++)
                         temp[i-1] = token[i];
                 }
                 
-                final_path = (char *)malloc(sizeof(char) *(n + strlen(HOME)));
+                final_path = (char *)malloc(sizeof(char) *(n + strlen(HOME) + 10));
                 strcpy(final_path, HOME);
                 strcat(final_path, temp);
+                final_path[n + strlen(HOME)-1] = '\0';
                 free(temp);
             }
 
-            else final_path = token;
+            else 
+            {
+                final_path = (char *)malloc(sizeof(char)*n + 100);
+                strcpy(final_path, token);
+            }
         
             ls_out(final_path, f1, hidden);
+            free(final_path);
         }
 
         token = strtok(NULL, " \n\t\r");
@@ -149,4 +157,5 @@ void ls(char *command)
 
     if(x==0 || (x==1 && y == 0))
         ls_out(".", f1, hidden);
+        
 }
