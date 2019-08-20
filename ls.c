@@ -35,19 +35,23 @@ void long_listing(char *directory, char *filename)
         perms[8] = (p & S_IWOTH) ? 'w' : '-';
         perms[9] = (p & S_IXOTH) ? 'x' : '-';
         perms[10] = '\0';
-        char * time = ctime(&name.st_mtime);
-        char * sho = (char *)malloc(sizeof(char) * strlen(time));
-        int f = 0, j=0;
-        for(int i = 0; i <strlen(time); i++)
-        {
-            if(f==1)
-                sho[j++] = time[i];
+        //char * time = ctime(&name.st_mtime);
+        // char * sho = (char *)malloc(sizeof(char) * strlen(time));
+        // int f = 0, j=0;
+        // for(int i = 0; i <strlen(time); i++)
+        // {
+        //     if(f==1)
+        //         sho[j++] = time[i];
 
-            if(time[i] == ' ')
-                f = 1;
-        }
-        printf("%s\t%ld\t%s\t%s\t%ld\t %.12s \t%s\n", perms, name.st_nlink, pw->pw_name,gr->gr_name, name.st_size, sho, filename);
+        //     if(time[i] == ' ')
+        //         f = 1;
+        // }
+        char *time = (char *)malloc(sizeof(char) * 50); 
+        strftime(time, 50, "%b  %d %H:%M", localtime( &name.st_mtime));
+        printf("%s\t%ld\t%s\t%s\t%ld\t %s\t%s\n", perms, name.st_nlink, pw->pw_name,gr->gr_name, name.st_size, time, filename);
         free(perms);
+        free(time);
+        //free(sho);
     }
    
     free(filepath);
@@ -78,6 +82,7 @@ void ls_out(char *dir_name, int flag, int hidden)
             break;
     
         case 1:
+            printf("Long list: \n");
             for(int i=0; i<n; i++)
             {
                 if(hidden == 0 && !is_hidden(file[i]->d_name) || hidden == 1)
@@ -93,14 +98,14 @@ void ls_out(char *dir_name, int flag, int hidden)
 
 void ls(char *command)
 {
-    int f1 = 0;
+    int f1 = 0, hidden =0, x = 0, y = 0;
     char *token = command;
 
     token = strtok(NULL, " \n\t\r");
 
-    int hidden = 0;
     while (token != NULL)
     {
+        x = 1;
         if(!strcmp(token,"-l"))
             f1 = 1;
     
@@ -110,17 +115,17 @@ void ls(char *command)
         else if(!strcmp(token,"-al") || !strcmp(token,"-la"))
         {   
             f1 = 1, hidden = 1;
-        }
-        
+        }    
 
         else
         {
+            y = 1;
             char *final_path;
             if(token[0] == '~')
             {
                 int n = strlen(token);
                 char *temp = (char *)malloc(sizeof(char) *n);
-                
+                strcpy(temp, "");
                 if(n > 1)
                 {
                     for(int i=1; i < n; i++)
@@ -141,4 +146,7 @@ void ls(char *command)
         token = strtok(NULL, " \n\t\r");
         
     }
+
+    if(x==0 || (x==1 && y == 0))
+        ls_out(".", f1, hidden);
 }

@@ -13,7 +13,7 @@ void cd(char *command)
     {   
         int n = strlen(token);
         char *temp = (char *)malloc(sizeof(char) *n);
-        
+        strcpy(temp, "");
         if(n > 1)
         {
             for(int i=1; i < n; i++)
@@ -24,6 +24,7 @@ void cd(char *command)
         strcpy(final_path, HOME);
         strcat(final_path, temp);
         free(temp);
+        printf("%s\n", final_path);
         if(chdir(final_path) != 0) 
             perror("Error");
 
