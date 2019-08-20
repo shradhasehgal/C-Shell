@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include "execute_com.c"
 
 #define EXIT_FAILURE 1
 
@@ -65,10 +66,9 @@ void shell()
         input = get_input();
         char **commands;
         commands = tokenize(input);
-        for(int i=0; i < no; i++)
-        {
+        for(int i = 0; i < no; i++)
+            execute_com(commands[i]);
             
-        }
 
     } while(1);
 }
