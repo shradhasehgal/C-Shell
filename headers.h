@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <grp.h>
 #include <pwd.h>
+#include <sys/wait.h>
 
 #define EXIT_FAILURE 1
 char HOST[256], USER[256], CWD[2048], HOME[2048];

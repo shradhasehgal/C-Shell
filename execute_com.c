@@ -40,10 +40,10 @@ void execute_com(char *command)
             no_args++;
         }
         
-        if(args[no_args-1] == '&')
-            background(args, no_args);
+        if(!strcmp(args[no_args-1],"&"))
+            run(args, no_args, 1);
 
-        else foreground(args, no_args);
+        else run(args, no_args, 0);
     
         for(int j=0; j < no_args; j++)
             free(args[j]);
