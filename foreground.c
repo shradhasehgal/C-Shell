@@ -31,7 +31,12 @@ void run(char **args, int no_args, int bg)
                     wpid = waitpid(pid, &status, WUNTRACED);
                } while (!WIFEXITED(status) && !WIFSIGNALED(status));
           }
-          
+
+          else
+          {
+               back_g++;
+               printf("[%d] %d\n", back_g, pid);
+          }
      }
 
      return;

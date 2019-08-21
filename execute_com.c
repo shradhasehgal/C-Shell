@@ -4,14 +4,17 @@
 #include "echo.c"
 #include "ls.c"
 #include "foreground.c"
-#include "background.c"
+#include "pinfo.c"
+#include "history.c"
 
 void execute_com(char *command)
 {
-    //int n = strlen(command);
-    //char *command_copy = (char *)malloc(sizeof(char) * n +10);
-    //strcpy(command_copy, command);
-    //command_copy[n-1] ='\0';
+    // int n = strlen(command);
+    // hist[hist_i] = (char *)malloc(sizeof(char) * n +10);
+    strcpy(hist[hist_i], command);
+    hist_i++;
+    // hist[hist_i-1] ='\0';
+    
     command = strtok(command, " \n\t\r");
     if(strcmp(command, "quit") == 0)
         exit(EXIT_SUCCESS);
@@ -28,6 +31,12 @@ void execute_com(char *command)
     else if(strcmp(command, "ls") == 0)
         ls(command);
 
+    else if(strcmp(command, "pinfo") == 0)
+        pinfo(command);
+
+    else if(strcmp(command, "history") == 0)
+        history(command);
+
     else
     {
         char **args = (char**)malloc(sizeof(char*) * 100);
@@ -40,8 +49,17 @@ void execute_com(char *command)
             no_args++;
         }
         
-        if(!strcmp(args[no_args-1],"&"))
+        if(!strcmp(args[no_args-1], "&"))
+        {
+            args[no_args-1] = NULL;
             run(args, no_args, 1);
+        }
+
+        else if(args[no_args-1][strlen(args[no_args-1]) -1] == '&')
+        {
+            args[no_args-1][strlen(args[no_args-1]) -1] = '\0';
+            run(args, no_args, 1);
+        }
 
         else run(args, no_args, 0);
     
