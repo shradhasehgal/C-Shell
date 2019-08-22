@@ -29,19 +29,23 @@ void nightswatch(char **args, int no_args)
     } 
 
     int n = atoi(args[2]);
-
-    FILE *foo = fopen("/proc/interrupts", "r");
-    if(foo == NULL)
-        printf("Can't open /proc/interrupts file\n");
-
-    else
+    
+    if(f==0)
     {
-        char *line = read_file("/proc/interrupts", 1);
-        printf("%s\n",line);
-        free(line);  
-        fclose(foo);
-    }
+        FILE *foo = fopen("/proc/interrupts", "r");
+        if(foo == NULL)
+            printf("Can't open /proc/interrupts file\n");
 
+        else
+        {
+            char *line = read_file("/proc/interrupts", 1);
+            printf("%s\n",line);
+            free(line);  
+            fclose(foo);
+        }
+
+    }
+    
     while(1)
     {
         fd_set rfds;
@@ -58,10 +62,12 @@ void nightswatch(char **args, int no_args)
         else if (retval)
         {
             retval = select(1, &rfds, NULL, NULL, &tv);
-            char buffer[2];
-            read(STDIN_FILENO, buffer, 1);
+            //char buffer[2];
+            //read(STDIN_FILENO, buffer, 1);
+            char c = fgetc(stdin);
+            char d = fgetc(stdin);
 
-            if(!strcmp(buffer, "q"))
+            if(c == 'q')
                 return;
         }
             
