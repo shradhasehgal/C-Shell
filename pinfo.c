@@ -46,27 +46,29 @@ void pinfo(char *command)
         char *token1 = strtok(status_info, ":\t"); token1 = strtok(NULL, ":\t");
         char *token2 = strtok(memory_info, ":\t\r "); token2 = strtok(NULL, ":\t\r");
         
-        char exe_path[2048]; char * p = malloc(sizeof(char) * 2048); 
+        char exe_path[2048];
+        char *p; 
+        //char * p = malloc(sizeof(char) * 2048);
+        printf("pid -- %d\nProcess Status -- %sVirtual Memory -- %sExecutable path -- ", p_id, token1, token2); 
         int ret = readlink(exe, exe_path, 1000);
         if(ret == -1)
-            p = "No path for executable\0";
+            printf("No path for executable");
         else 
         {
-            exe_path[ret] = '\0'; p[ret] ='\0';
+            exe_path[ret] = '\0'; 
             p = strstr(exe_path, HOME);
             if(p)
             {
-                p[strlen(HOME)-1] ='~';
-                p += strlen(HOME)-1;
-            }
-            else p = exe_path;        
-        }
+                //p[strlen(HOME)-1] ='~';
+                p += strlen(HOME);
+                printf("~%s\n", p);
 
-        printf("pid -- %d\nProcess Status -- %sVirtual Memory -- %sExecutable path -- %s\n", p_id, token1, token2, p);
+            }
+            else printf("~%s\n", exe_path);
+        }
 
         free(status_info);
         free(memory_info);
-        free(p);
     } 
 
 

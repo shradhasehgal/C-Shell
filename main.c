@@ -75,6 +75,7 @@ void shell()
 
 int main()
 {
+
     if (getcwd(HOME, sizeof(HOME)) == NULL)
     {
        perror("getcwd() error");

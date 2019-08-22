@@ -9,15 +9,15 @@
 
 void execute_com(char *command)
 {
-    // int n = strlen(command);
-    // hist[hist_i] = (char *)malloc(sizeof(char) * n +10);
     strcpy(hist[hist_i], command);
     hist_i++;
-    // hist[hist_i-1] ='\0';
     
     command = strtok(command, " \n\t\r");
     if(strcmp(command, "quit") == 0)
+    {
+        printf("\033[1;35m\n*** Exiting shell ***\n\033[0m");
         exit(EXIT_SUCCESS);
+    }
 
     else if(strcmp(command, "pwd") == 0)
         pwd();

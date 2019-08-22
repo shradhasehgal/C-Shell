@@ -15,3 +15,4 @@
 char HOST[256], USER[256], CWD[2048], HOME[2048];
 int no, back_g;
 char hist[20][1000], hist_i;
+void prompt();
