@@ -25,6 +25,7 @@ void prompt()
     {
         char * p;
         p = strstr(CWD, HOME);
+        //printf("%s %s \n", CWD, HOME);
         if(p)
         {
             DIR = p + strlen(HOME);
@@ -75,6 +76,7 @@ void shell()
 
 int main()
 {
+    printf("\033[1;35m\n*** Welcome to Shell Zaldor ***\n\n\033[0m");
 
     if (getcwd(HOME, sizeof(HOME)) == NULL)
     {

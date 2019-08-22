@@ -2,7 +2,8 @@
 
 void cd(char *command)
 {
-    char *token = strtok(NULL, " \n\t\r");
+    char *token = command;
+    token = strtok(NULL, " \n\t\r");
     if(token == NULL) 
     {
         if(chdir(HOME) != 0) 
@@ -22,7 +23,7 @@ void cd(char *command)
         }
         temp[i] ='\0';
         
-        char *final_path = (char *)malloc(sizeof(char) *(n + strlen(HOME)));
+        char *final_path = (char *)malloc(sizeof(char) *(n + strlen(HOME)+12));
         strcpy(final_path, HOME);
         strcat(final_path, temp);
         final_path[n +strlen(HOME)-1] ='\0';

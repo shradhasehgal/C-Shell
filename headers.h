@@ -15,7 +15,7 @@
 #include <sys/wait.h>
 
 #define EXIT_FAILURE 1
-char HOST[256], USER[256], CWD[2048], HOME[2048];
+char HOST[1024], USER[1024], CWD[2048], HOME[2048];
 int no, back_g;
 char hist[20][1000], hist_i;
 
@@ -27,7 +27,7 @@ struct bg_job
 };
 
 typedef struct bg_job bg_job;
-bg_job jobs[100];
+bg_job jobs[50];
 
 void prompt();
 

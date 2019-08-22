@@ -52,7 +52,7 @@ void pinfo(char *command)
         printf("pid -- %d\nProcess Status -- %sVirtual Memory -- %sExecutable path -- ", p_id, token1, token2); 
         int ret = readlink(exe, exe_path, 1000);
         if(ret == -1)
-            printf("No path for executable");
+            printf("No path for executable\n");
         else 
         {
             exe_path[ret] = '\0'; 

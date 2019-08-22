@@ -11,11 +11,15 @@ void execute_com(char *command)
 {
     strcpy(hist[hist_i], command);
     hist_i++;
+    if(hist_i == 20)
+        hist_i = 0;
     
     command = strtok(command, " \n\t\r");
+    if(command == NULL)
+        return;
     if(strcmp(command, "quit") == 0)
     {
-        printf("\033[1;35m\n*** Exiting shell ***\n\033[0m");
+        printf("\033[1;35m\n*** Exiting shell ***\n\\n033[0m");
         exit(EXIT_SUCCESS);
     }
 
