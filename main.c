@@ -25,11 +25,20 @@ void prompt()
     {
         char * p;
         p = strstr(CWD, HOME);
-        if(p) DIR = p + strlen(HOME);
-        else DIR = CWD;
+        if(p)
+        {
+            DIR = p + strlen(HOME);
+            printf("<\x1B[1;32m%s@%s\x1B[0m:\x1B[1;34m~%s\x1B[0m>", USER, HOST, DIR);
+        }
+        else
+        {
+            DIR = CWD;
+            printf("<\x1B[1;32m%s@%s\x1B[0m:\x1B[1;34m%s\x1B[0m>", USER, HOST, DIR);
+        }
+
     }
 
-    printf("<\x1B[1;32m%s@%s\x1B[0m:\x1B[1;34m~%s\x1B[0m>", USER, HOST, DIR);
+    
 }
 
 char **tokenize(char *input)
