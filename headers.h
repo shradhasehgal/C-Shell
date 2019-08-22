@@ -30,5 +30,5 @@ typedef struct bg_job bg_job;
 bg_job jobs[50];
 
 void prompt();
-
+char * read_file(char *filename, int n);
 #endif

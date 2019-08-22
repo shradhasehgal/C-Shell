@@ -1,4 +1,5 @@
 #include "headers.h"
+
 void history(char *command)
 {
     char *token = command;

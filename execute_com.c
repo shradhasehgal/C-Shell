@@ -6,6 +6,7 @@
 #include "run.c"
 #include "pinfo.c"
 #include "history.c"
+#include "nightswatch.c"
 
 void execute_com(char *command)
 {
@@ -19,7 +20,7 @@ void execute_com(char *command)
         return;
     if(strcmp(command, "quit") == 0)
     {
-        printf("\033[1;35m\n*** Exiting shell ***\n\\n033[0m");
+        printf("\033[1;35m\n*** Exiting shell ***\n\n\n\033[0m");
         exit(EXIT_SUCCESS);
     }
 
@@ -41,10 +42,12 @@ void execute_com(char *command)
     else if(strcmp(command, "history") == 0)
         history(command);
 
+
     else
     {
         char **args = (char**)malloc(sizeof(char*) * 100);
         int no_args = 0;
+        
         while (command != NULL)
         {
             args[no_args]  = (char *)malloc(sizeof(char) *strlen(command)+10);
@@ -52,8 +55,11 @@ void execute_com(char *command)
             command = strtok(NULL, " \n\t\r");
             no_args++;
         }
+
+        if(strcmp(args[0], "nightswatch") == 0)
+            nightswatch(args, no_args);
         
-        if(!strcmp(args[no_args-1], "&"))
+        else if(!strcmp(args[no_args-1], "&"))
         {
             args[no_args-1] = NULL;
             run(args, no_args, 1);

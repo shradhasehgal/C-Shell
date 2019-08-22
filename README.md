@@ -61,7 +61,13 @@ These commands have been defined by me and are contained within the shell itself
     - Lists the last [num] commands. If no arguments are specified, it displays the last 10 commands.
     - Implemented in [history.c](history.c)
 
+3. `nightswatch -n [seconds] [dirty/interrupt]`
 
+    - `interrupt` argument prints the number of times CPU has been interrupted by keyboard.
+    - `dirty` argument prints size of the dirty part of memory.
+    - Executes every `n` number of seconds as specified by user.
+    -  Exits when symbol `q` is pressed.
+    - Error handling done for incorrect arguments.
 
 ### Coding style
 
