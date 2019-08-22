@@ -7,11 +7,28 @@ void handler(int sig)
 
      if(pid > 0)
      {
+          char str[200];
+          for(int i=0; i < back_g; i++)
+          {
+               if(jobs[i].PID == pid)
+               {
+                    int j;
+                    strcpy(str, jobs[i].job_name);
+                    for(j=i; j < back_g-1; j++)
+                    {
+                         strcpy(jobs[i].job_name, jobs[i+1].job_name);
+                         jobs[i].PID = jobs[i+1].PID;
+                    }
+
+                    break;
+               }
+          }
+
           back_g--;
           if(WEXITSTATUS(x) == 0 && WIFEXITED(x))
-          fprintf(stderr,"\033[1;31m\nProcess with PID %d exited normally\n\033[0m", pid);
+          fprintf(stderr,"\033[1;31m\n%s with PID %d exited normally\n\033[0m", str, pid);
      
-          else fprintf(stderr,"\033[1;31m\nProcess with PID %d failed to exit normally\n\033[0m", pid);
+          else fprintf(stderr,"\033[1;31m\n%s with PID %d failed to exit normally\n\033[0m",str, pid);
           prompt();
           fflush(stdout);
      }
@@ -34,7 +51,7 @@ void run(char **args, int no_args, int bg)
      {   
           if (execvp(args[0], args) < 0) 
           {     
-               printf("Command not found\n");
+               perror("Command not found");
                exit(EXIT_FAILURE);
           }
      }
@@ -51,6 +68,10 @@ void run(char **args, int no_args, int bg)
           else
           {
                signal(SIGCHLD, handler);
+               //jobs[back_g].job_name = malloc(sizeof(char) * strlen(args[0] + 2));
+               strcpy(jobs[back_g].job_name, args[0]);
+               jobs[back_g].job_name[strlen(args[0])]='\0';
+               jobs[back_g].PID = pid;
                back_g++;
                printf("[%d] %d\n", back_g, pid);
           }

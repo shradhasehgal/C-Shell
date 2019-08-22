@@ -1,3 +1,6 @@
+#ifndef HEADER_H
+#define HEADER_H
+
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -15,4 +18,17 @@
 char HOST[256], USER[256], CWD[2048], HOME[2048];
 int no, back_g;
 char hist[20][1000], hist_i;
+
+
+struct bg_job
+{
+    char job_name[100];
+    pid_t PID;  
+};
+
+typedef struct bg_job bg_job;
+bg_job jobs[100];
+
 void prompt();
+
+#endif

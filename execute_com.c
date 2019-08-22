@@ -3,7 +3,7 @@
 #include "cd.c"
 #include "echo.c"
 #include "ls.c"
-#include "foreground.c"
+#include "run.c"
 #include "pinfo.c"
 #include "history.c"
 
