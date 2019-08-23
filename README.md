@@ -59,7 +59,8 @@ These commands have been defined by me and are contained within the shell itself
 2. `history [num]`
 
     - Lists the last [num] commands. If no arguments are specified, it displays the last 10 commands.
-    - Implemented in [history.c](history.c)
+    - Retains the `history` even upon Shell exit.
+    - Implemented in [history.c](history.c) - uses [history.txt](history.text)
 
 3. `nightswatch -n [seconds] [dirty/interrupt]`
 

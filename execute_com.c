@@ -76,9 +76,5 @@ void execute_com(char *command)
             free(args[j]);
 
         free(args);
-        //printf("%s", command_copy);
-        //if(command_copy[n-1])
     }
-
-    //free(command_copy);
 }
