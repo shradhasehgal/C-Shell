@@ -1,3 +1,21 @@
-2
-history
+147
 quit
+ls
+ls .
+history
+clear
+history 4
+quit
+history
+history
+history
+history
+history
+history 5
+clear
+ls
+ls -
+ls .
+ls ~
+quit
+history

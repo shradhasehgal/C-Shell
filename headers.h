@@ -17,7 +17,8 @@
 #define EXIT_FAILURE 1
 char HOST[1024], USER[1024], CWD[2048], HOME[2048];
 int no, back_g;
-char hist[20][1000], hist_i;
+char hist[20][1000];
+int hist_i;
 
 
 struct bg_job

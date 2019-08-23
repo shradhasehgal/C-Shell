@@ -54,7 +54,7 @@ void history(char *command)
         n = atoi(token);
 
     int count = 0;
-
+    
     for(int i = hist_i-1; i >=0 && count < n; i--)
     {
         printf("%s", hist[i % 20]);

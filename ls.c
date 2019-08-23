@@ -68,6 +68,7 @@ void ls_out(char *dir_name, int flag, int hidden)
     switch(flag)
     {
         case 0:
+            //printf("\nListing:\n\n");
             for(int i=0; i<n; i++) 
             { 
                 if(hidden == 0 && !is_hidden(file[i]->d_name) || hidden == 1)
