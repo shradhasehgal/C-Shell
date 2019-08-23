@@ -19,7 +19,8 @@ void execute_com(char *command)
     if(strcmp(command, "quit") == 0)
     {
         write_history();
-        printf("\033[1;35m\n*** Exiting shell ***\n\n\n\033[0m");
+        printf("\033[1;35m\n*** Goodbye, %s ***\n\033[0m", USER);
+        printf("\n*** Nash Out ~(˘▾˘~) ***\n\n");
         exit(EXIT_SUCCESS);
     }
 

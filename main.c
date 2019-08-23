@@ -77,7 +77,7 @@ void shell()
 int main()
 {
     printf("\033[1;35m\n *** Welcome to Shell Nash ***\n\033[0m");
-    printf("\x1B[1;34m\n She sells C-Shells on the C-Shore :)\n\n\x1B[0m");
+    printf("\n She sells C-Shells on the C-Shore :)\n\n");
     load_history();
     if (getcwd(HOME, sizeof(HOME)) == NULL)
     {
