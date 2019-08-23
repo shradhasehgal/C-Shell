@@ -78,6 +78,7 @@ int main()
 {
     printf("\033[1;35m\n*** Welcome to Shell Zaldor ***\n\n\033[0m");
 
+    load_history();
     if (getcwd(HOME, sizeof(HOME)) == NULL)
     {
        perror("getcwd() error");

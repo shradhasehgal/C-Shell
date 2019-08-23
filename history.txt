@@ -1,0 +1,9 @@
+8
+ls
+clear
+history
+clear
+quit
+history
+quit
+quit
