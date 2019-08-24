@@ -1,21 +1,21 @@
-162
+96
+emacs &
 quit
-quit
-ls .
-history
-clear
-history 4
+nightswatch -n 1 interrupt
+it
+quit
 quit
 ls
+ls -l
+make
 quit
+ls -l
+cd ..
+clear
+ls
+ls -l
 quit
-quit
-quit
-quit
-quit
-quit
-quit
-quit
-quit
-quit
-quit
+clear
+ls
+history
+clear

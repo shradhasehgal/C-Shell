@@ -11,10 +11,7 @@ char *get_input()
 
 void prompt()
 {
-    gethostname(HOST, sizeof(HOST));
-    getlogin_r(USER, sizeof(USER));
     char *DIR;
-    
     if (getcwd(CWD, sizeof(CWD)) == NULL)
     {
        perror("getcwd() error");
@@ -78,13 +75,34 @@ int main()
 {
     printf("\033[1;35m\n *** Welcome to Shell Nash ***\n\033[0m");
     printf("\n She sells C-Shells on the C-Shore :)\n\n");
-    load_history();
-    if (getcwd(HOME, sizeof(HOME)) == NULL)
+
+    gethostname(HOST, sizeof(HOST));
+    getlogin_r(USER, sizeof(USER));
+    char *DIR;
+    
+    pid_t p_id;
+    p_id = getpid();
+    char *exe = malloc(sizeof(char) *(40));
+    sprintf(exe,"/proc/%d/exe", p_id);
+    int ret = readlink(exe, HOME, 1000);
+    HOME[ret] = '\0';
+
+    for(int i = strlen(HOME)-1; i>=0; i--)
     {
-       perror("getcwd() error");
-       return 1;
+        if(HOME[i] == '/')
+        {
+            HOME[i] = '\0';
+            break;
+        }
     }
 
-    else shell();
+    load_history();
+    // if (getcwd(HOME, sizeof(HOME)) == NULL)
+    // {
+    //    perror("getcwd() error");
+    //    return 1;
+    // }
+
+    shell();
     return 0;
 }

@@ -48,7 +48,11 @@ void long_listing(char *directory, char *filename)
         // }
         char *time = (char *)malloc(sizeof(char) * 50); 
         strftime(time, 50, "%b  %d %H:%M", localtime( &name.st_mtime));
-        printf("%s\t%ld\t%s\t%s\t%ld\t %s\t%s\n", perms, name.st_nlink, pw->pw_name,gr->gr_name, name.st_size, time, filename);
+        if(perms[0] == 'd')
+            printf("%s\t%ld\t%s\t%s\t%ld\t %s\t\x1B[1;34m%s\x1B[0m\n", perms, name.st_nlink, pw->pw_name,gr->gr_name, name.st_size, time, filename);
+        else if(perms[3] == 'x')
+            printf("%s\t%ld\t%s\t%s\t%ld\t %s\t\x1B[1;32m%s\x1B[0m\n", perms, name.st_nlink, pw->pw_name,gr->gr_name, name.st_size, time, filename);
+        else printf("%s\t%ld\t%s\t%s\t%ld\t %s\t%s\n", perms, name.st_nlink, pw->pw_name,gr->gr_name, name.st_size, time, filename);
         free(perms);
     }
    

@@ -1,8 +1,12 @@
 #include "headers.h"
 
+char hist_filename[2000];
+
 void load_history()
 {
-    FILE *file = fopen ("history.txt", "r" );
+    strcpy(hist_filename, HOME);
+    strcat(hist_filename, "/history.txt");
+    FILE *file = fopen (hist_filename, "r" );
     if( file != NULL )
     {
         char line[128]; 
@@ -30,7 +34,7 @@ void load_history()
 
 void write_history()
 {
-    FILE *file = fopen ("history.txt", "w" );
+    FILE *file = fopen (hist_filename, "w" );
     int n;
 
     if(hist_i < 20)
@@ -53,12 +57,12 @@ void history(char *command)
     if(token != NULL)
         n = atoi(token);
 
-    int count = 0;
+    int count = n;
     
-    for(int i = hist_i-1; i >=0 && count < n; i--)
+    for(int i = hist_i - count; count > 0; i++, count--)
     {
         printf("%s", hist[i % 20]);
-        count++;
+        //count++;
     }
     
 }

@@ -8,10 +8,10 @@ This is an implementation of a Linux shell written in C language.
 ## Run the shell
 
 1. Clone this directory and `cd` into it.
-2. Run the command `make`
-3. Run `./shell` to get a prompt of the form `username@system_name:path`
+2. Run the command `make`.
+3. Run `./shell` to get a prompt of the form `username@system_name:path`.
 4. Run any command in the shell. It can entail as many number of tabs and spaces, the shell accounts for those.
-5. In order to exit, run `quit`
+5. In order to exit, run `quit`.
 
 ## Features
 
@@ -24,10 +24,13 @@ These commands have been defined by me and are contained within the shell itself
     - Displays the name of the working directory.
     - Implemented in [pwd.c](pwd.c)
 
-2. `ls [-l -a] [file]`
+2. `ls [-l -a] [directory]`
     
     - Lists all the files and directories in the specified directory in alphabetical order.
     - Variations such as `ls, ls . , ls ..` also work.
+    - Also handles multiple directories as arguments. eg. `ls -l dir1 dir2 dir3`.
+    - Throws error if you try to `ls` on anything except a directory. 
+    - Also highlights directories in blue and executable files in green.
     - Implemented in [ls.c](ls.c)
 
 3. `cd [file]`
@@ -41,33 +44,39 @@ These commands have been defined by me and are contained within the shell itself
     - Accounts for double quotes as well.
     - Implemented in [echo.c](echo.c)
 
+5. `quit`
+
+    - Exits the shell with return status as success, and adds updates [history.txt](history.text).
+
 ### Foreground and Background Processes
 
 - All other commands are treated as system commands like emacs, vim etc.
-- To run a process in the background, follow the command with a '&' symbol. Eg. `emacs &`
+- To run a process in the background, follow the command with a '&' symbol. Eg. `emacs &`.
 - Upon termination of a background process, the shell prints its PID and exit status.
+- Handles `&` no matter where it is in the end. eg. `emacs& , emacs         &, ls -l&`.
+- Also returns number of background processes running currently.
 - Implemented in [run.c](run.c) 
 
 ### Additional Commands
 
 1. `pinfo [PID]`
 
-    - Prints numerous details about the process such as its status, memory, and executable path
+    - Prints numerous details about the process such as its status, memory, and executable path.
     - Just `pinfo` with no arguments gives details of the shell.
     - Implemented in [pinfo.c](pinfo.c)
 
 2. `history [num]`
 
     - Lists the last [num] commands. If no arguments are specified, it displays the last 10 commands.
-    - Retains the `history` even upon Shell exit.
-    - Implemented in [history.c](history.c) - uses [history.txt](history.text)
+    - Retains the `history` even upon Shell exit - uses [history.txt](history.text).
+    - Implemented in [history.c](history.c) 
 
 3. `nightswatch -n [seconds] [dirty/interrupt]`
 
     - `interrupt` argument prints the number of times CPU has been interrupted by keyboard.
     - `dirty` argument prints size of the dirty part of memory.
     - Executes every `n` number of seconds as specified by user.
-    -  Exits when symbol `q` is pressed.
+    - Exits when symbol `q` is pressed.
     - Error handling done for incorrect arguments.
 
 ### Coding style
@@ -77,5 +86,5 @@ The code is completely modular with different `.c` files for each command, and a
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details.
 
