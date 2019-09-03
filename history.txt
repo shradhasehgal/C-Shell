@@ -1,21 +1,21 @@
-96
-emacs &
+127
+ls &
+ls .. &
+ls oof
 quit
-nightswatch -n 1 interrupt
-it
-quit
+echo baba &
+clear
+quit
+ls ..
+quiy
+quit
 quit
 ls
-ls -l
-make
+ls ..
+ls &
 quit
-ls -l
-cd ..
-clear
-ls
-ls -l
+
+
+
+
 quit
-clear
-ls
-history
-clear
