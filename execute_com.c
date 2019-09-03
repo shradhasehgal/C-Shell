@@ -7,6 +7,7 @@
 #include "pinfo.c"
 #include "history.c"
 #include "nightswatch.c"
+#include "env.c"
 
 void execute_com(char *command)
 {
@@ -48,6 +49,12 @@ void execute_com(char *command)
         args[no_args-1][strlen(args[no_args-1]) -1] = '\0';
         run(args, no_args, 1);
     }
+
+    else if(!strcmp(args[0], "setenv"))
+        seten(args, no_args);
+
+    else if(!strcmp(args[0], "unsetenv"))
+        unseten(args, no_args);
     
     else if(strcmp(command, "quit") == 0)
     {

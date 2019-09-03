@@ -61,6 +61,7 @@ void shell()
     do
     {
         prompt();
+        signal (SIGINT, SIG_IGN);
         input = get_input();
         char **commands;
         commands = tokenize(input);
@@ -70,6 +71,12 @@ void shell()
 
     } while(1);
 }
+
+// void ctrl_c(int signum)
+// {
+
+//     signal(SIGINT, ctrl_c); 
+// } 
 
 int main()
 {
@@ -97,12 +104,7 @@ int main()
     }
 
     load_history();
-    // if (getcwd(HOME, sizeof(HOME)) == NULL)
-    // {
-    //    perror("getcwd() error");
-    //    return 1;
-    // }
-
+    //signal(SIGINT, ctrl_c);
     shell();
     return 0;
 }
