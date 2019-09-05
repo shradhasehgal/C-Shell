@@ -8,6 +8,7 @@
 #include "history.c"
 #include "nightswatch.c"
 #include "env.c"
+#include "jobs.c"
 
 void removeSpaces(char *str) 
 { 
@@ -126,17 +127,15 @@ void execute_com(char *command)
     else if(strcmp(command, "history") == 0)
         history(command);
 
+    else if(strcmp(command, "jobs") == 0)
+        job();
     else run(args, no_args, 0);
     
     for(int j=0; j < no_args; j++)
         free(args[j]);
 
-    if(com2)
         free(com2);
-
-    if(com)
         free(com);
-    if(args)
         free(args);  
     
 }
