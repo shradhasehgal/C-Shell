@@ -36,7 +36,6 @@ void execute_com(char *command)
 
     if(com2[0]=='\033')
     {
-        //printf("omg");
         int i = 0;
         if(strlen(com2)%3 == 0)
         {
