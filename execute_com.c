@@ -9,18 +9,62 @@
 #include "nightswatch.c"
 #include "env.c"
 
+void removeSpaces(char *str) 
+{ 
+    int count = 0; 
+    for (int i = 0; str[i]; i++) 
+        if (str[i] != ' ') 
+            str[count++] = str[i]; 
+
+    str[count] = '\0'; 
+} 
+
+
 void execute_com(char *command)
 {
-    strcpy(hist[hist_i % 20], command);
-    hist_i++;
     
-    char *com = (char *)malloc(sizeof(char) *2000);
+    char *com = (char *)malloc(sizeof(char) *strlen(command)+10);
+    char *com2 = (char *)malloc(sizeof(char) *strlen(command)+10);
     strcpy(com, command);
-    //printf("%s\n", com);
+    strcpy(com2, command);
+    removeSpaces(com2);
+    int up = 0;
     com = strtok(com, " \n\t\r");
+    com2 = strtok(com2, " \n\t\r");
     
     if(com == NULL)
         return;
+
+    if(com2[0]=='\033')
+    {
+        int i = 0;
+        if(strlen(com2)%3 == 0)
+        {
+            while(com2[3*i]!= '\0')
+            {
+                if(com2[3*i] == '\033' && com2[3*i+1] =='[' && com2[3*i+2] == 'A')  //checking for up key
+                    up++, i++;
+
+                else 
+                {
+                    up = 0;
+                    break;
+                }
+            }
+
+            if(up > 0)
+            {
+                prompt();
+                printf("%s",hist[(hist_i - up) % 20]);
+                strcpy(command, hist[(hist_i - up) % 20]);
+                strcpy(com, command);
+                com = strtok(com, " \n\t\r");
+            }
+        }
+    }
+    
+    strcpy(hist[hist_i % 20], command);
+    hist_i++;
 
     char **args = (char**)malloc(sizeof(char*) * 100);
     int no_args = 0;
@@ -87,6 +131,6 @@ void execute_com(char *command)
     for(int j=0; j < no_args; j++)
         free(args[j]);
 
-    free(args), free(com);
+    free(args), free(com); free(com2);
     
 }
