@@ -13,7 +13,7 @@ void removeSpaces(char *str)
 { 
     int count = 0; 
     for (int i = 0; str[i]; i++) 
-        if (str[i] != ' ') 
+        if (str[i] != ' ' && str[i]!='\t' && str[i]!='\n') 
             str[count++] = str[i]; 
 
     str[count] = '\0'; 
@@ -23,11 +23,11 @@ void removeSpaces(char *str)
 void execute_com(char *command)
 {
     
-    char *com = (char *)malloc(sizeof(char) *strlen(command)+10);
-    char *com2 = (char *)malloc(sizeof(char) *strlen(command)+10);
+    char *com = (char *)malloc(sizeof(char) *2000);
+    char *com2 = (char *)malloc(sizeof(char) *2000);
     strcpy(com, command);
     strcpy(com2, command);
-    removeSpaces(com2);
+    //removeSpaces(com2);
     int up = 0;
     com = strtok(com, " \n\t\r");
     com2 = strtok(com2, " \n\t\r");
@@ -37,6 +37,7 @@ void execute_com(char *command)
 
     if(com2[0]=='\033')
     {
+        //printf("omg");
         int i = 0;
         if(strlen(com2)%3 == 0)
         {
@@ -71,6 +72,7 @@ void execute_com(char *command)
     
     while (com != NULL)
     {
+        //printf("%s\n",com);
         args[no_args]  = (char *)malloc(sizeof(char) *strlen(com)+10);
         strcpy(args[no_args], com);
         com = strtok(NULL, " \n\t\r");
@@ -131,6 +133,12 @@ void execute_com(char *command)
     for(int j=0; j < no_args; j++)
         free(args[j]);
 
-    free(args), free(com); free(com2);
+    if(com2)
+        free(com2);
+
+    if(com)
+        free(com);
+    if(args)
+        free(args);  
     
 }
