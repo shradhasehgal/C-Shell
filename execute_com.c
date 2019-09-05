@@ -27,10 +27,9 @@ void execute_com(char *command)
     char *com2 = (char *)malloc(sizeof(char) *2000);
     strcpy(com, command);
     strcpy(com2, command);
-    //removeSpaces(com2);
+    removeSpaces(com2);
     int up = 0;
     com = strtok(com, " \n\t\r");
-    com2 = strtok(com2, " \n\t\r");
     
     if(com == NULL)
         return;
