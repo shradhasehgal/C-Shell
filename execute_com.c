@@ -9,6 +9,8 @@
 #include "nightswatch.c"
 #include "env.c"
 #include "jobs.c"
+#include "kjob.c"
+#include "overkill.c"
 
 void removeSpaces(char *str) 
 { 
@@ -83,6 +85,8 @@ void execute_com(char *command)
     if(strcmp(args[0], "nightswatch") == 0)
         nightswatch(args, no_args);
     
+    else if(strcmp(args[0], "kjob") == 0)
+        kjob(args, no_args);
     else if(!strcmp(args[no_args-1], "&"))
     {
         args[no_args-1] = NULL;
@@ -129,6 +133,10 @@ void execute_com(char *command)
 
     else if(strcmp(command, "jobs") == 0)
         job();
+    
+    else if(strcmp(command, "overkill") == 0)
+        overkill();
+
     else run(args, no_args, 0);
     
     for(int j=0; j < no_args; j++)
