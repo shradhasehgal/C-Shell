@@ -23,7 +23,7 @@ int hist_i;
 
 struct bg_job
 {
-    char job_name[100];
+    char job_name[300];
     pid_t PID;  
 };
 

@@ -8,7 +8,7 @@ void bg(char **args, int no_args)
     else
     {
         int job_no = atoi(args[1]);
-        if (job_no >= back_g)
+        if (job_no > back_g)
             printf("Enter valid job number\n");
         
         else kill(jobs[job_no].PID, SIGCONT);

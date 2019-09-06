@@ -12,6 +12,7 @@
 #include "kjob.c"
 #include "overkill.c"
 #include "bg.c"
+#include "fg.c"
 
 void removeSpaces(char *str) 
 { 
@@ -92,6 +93,9 @@ void execute_com(char *command)
     else if(!strcmp(args[0], "bg"))
         bg(args, no_args);
     
+    else if(!strcmp(args[0], "fg"))
+        fg(args, no_args);
+
     else if(!strcmp(args[no_args-1], "&"))
     {
         args[no_args-1] = NULL;

@@ -1,5 +1,15 @@
 #include "headers.h"
 
+void shift(int i)
+{
+     for(int j=i; j < back_g-1; j++)
+     {
+          strcpy(jobs[i].job_name, jobs[i+1].job_name);
+          jobs[i].PID = jobs[i+1].PID;
+     }
+     
+     back_g--;
+}
 void handler(int sig)
 {
      int x;
@@ -12,19 +22,12 @@ void handler(int sig)
           {
                if(jobs[i].PID == pid)
                {
-                    int j;
                     strcpy(str, jobs[i].job_name);
-                    for(j=i; j < back_g-1; j++)
-                    {
-                         strcpy(jobs[i].job_name, jobs[i+1].job_name);
-                         jobs[i].PID = jobs[i+1].PID;
-                    }
-
+                    shift(i);      
                     break;
                }
           }
 
-          back_g--;
           if(WEXITSTATUS(x) == 0 && WIFEXITED(x))
           fprintf(stderr,"\033[1;31m\n%s with PID %d exited normally\n\033[0m", str, pid);
      
@@ -70,7 +73,16 @@ void run(char **args, int no_args, int bg)
                signal(SIGCHLD, handler);
                //jobs[back_g].job_name = malloc(sizeof(char) * strlen(args[0] + 2));
                strcpy(jobs[back_g].job_name, args[0]);
-               jobs[back_g].job_name[strlen(args[0])]='\0';
+               
+               //printf("%d\n",no_args);
+               for(int i = 1; i < no_args-1; i++)
+               {
+                    // printf("%s\n", args[i]);
+                    strcat(jobs[back_g].job_name, " ");
+                    strcat(jobs[back_g].job_name, args[i]);
+               }
+
+               //jobs[back_g].job_name[strlen(args[0])]='\0';
                jobs[back_g].PID = pid;
                back_g++;
                printf("[%d] %d\n", back_g, pid);
