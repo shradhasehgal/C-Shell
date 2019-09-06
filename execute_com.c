@@ -11,6 +11,7 @@
 #include "jobs.c"
 #include "kjob.c"
 #include "overkill.c"
+#include "bg.c"
 
 void removeSpaces(char *str) 
 { 
@@ -82,11 +83,15 @@ void execute_com(char *command)
 
     command = strtok(command, " \n\t\r");
 
-    if(strcmp(args[0], "nightswatch") == 0)
+    if(!strcmp(args[0], "nightswatch"))
         nightswatch(args, no_args);
     
-    else if(strcmp(args[0], "kjob") == 0)
+    else if(!strcmp(args[0], "kjob"))
         kjob(args, no_args);
+    
+    else if(!strcmp(args[0], "bg"))
+        bg(args, no_args);
+    
     else if(!strcmp(args[no_args-1], "&"))
     {
         args[no_args-1] = NULL;
