@@ -20,6 +20,7 @@ int no, back_g;
 char hist[20][1000];
 int hist_i;
 pid_t SHELL_ID, CHILD_ID = -1;
+char CURR_JOB[2000];
 
 struct bg_job
 {

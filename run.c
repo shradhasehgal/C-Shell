@@ -64,6 +64,14 @@ void run(char **args, int no_args, int bg)
           if(bg == 0)
           {
                CHILD_ID = pid;
+               strcpy(CURR_JOB, args[0]);
+               
+               for(int i = 1; i < no_args-1; i++)
+               {
+                    strcat(CURR_JOB, " ");
+                    strcat(CURR_JOB, args[i]);
+               }
+
                
                do 
                {
