@@ -50,6 +50,7 @@ void run(char **args, int no_args, int bg)
           perror("Error");
           exit(EXIT_FAILURE);
      }
+
      else if (pid == 0) 
      {   
           if (execvp(args[0], args) < 0) 
@@ -62,6 +63,8 @@ void run(char **args, int no_args, int bg)
      {
           if(bg == 0)
           {
+               CHILD_ID = pid;
+               
                do 
                {
                     wpid = waitpid(pid, &status, WUNTRACED);

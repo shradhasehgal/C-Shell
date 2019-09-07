@@ -1,2 +1,2 @@
 all:
-	gcc -o nash main.c
+	gcc -o Nash main.c

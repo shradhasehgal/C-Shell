@@ -19,7 +19,7 @@ char HOST[1024], USER[1024], CWD[2048], HOME[2048];
 int no, back_g;
 char hist[20][1000];
 int hist_i;
-
+pid_t SHELL_ID, CHILD_ID = -1;
 
 struct bg_job
 {

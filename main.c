@@ -60,8 +60,8 @@ void shell()
     char *input;
     do
     {
+        CHILD_ID = -1;
         prompt();
-        signal (SIGINT, SIG_IGN);
         input = get_input();
         char **commands;
         commands = tokenize(input);
@@ -72,11 +72,20 @@ void shell()
     } while(1);
 }
 
-// void ctrl_c(int signum)
-// {
+void ctrl_c(int signum)
+{
+    pid_t p = getpid();
+    if(p < 0)
+        perror("Error");
+    
+    else if (p != SHELL_ID)
+        return;
 
-//     signal(SIGINT, ctrl_c); 
-// } 
+    if (CHILD_ID != -1)
+        kill(CHILD_ID, SIGINT);        
+    
+    signal(SIGINT, ctrl_c); 
+} 
 
 int main()
 {
@@ -89,6 +98,7 @@ int main()
     
     pid_t p_id;
     p_id = getpid();
+    SHELL_ID = p_id;
     char *exe = malloc(sizeof(char) *(40));
     sprintf(exe,"/proc/%d/exe", p_id);
     int ret = readlink(exe, HOME, 1000);
@@ -104,7 +114,7 @@ int main()
     }
 
     load_history();
-    //signal(SIGINT, ctrl_c);
+    signal(SIGINT, ctrl_c);
     shell();
     return 0;
 }
