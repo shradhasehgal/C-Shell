@@ -14,6 +14,8 @@ void fg(char **args, int no_args)
 		return;
 	}
 	pid = jobs[job_no-1].PID;
+	strcpy(CURR_JOB, jobs[job_no-1].job_name);
+	CHILD_ID = pid;
 	shift(job_no);
 	kill(pid, SIGCONT);
 	waitpid(pid, &status, WUNTRACED);
