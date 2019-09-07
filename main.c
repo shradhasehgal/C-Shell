@@ -89,7 +89,7 @@ void ctrl_z(int signum)
         jobs[back_g].PID = CHILD_ID;
         back_g++;
     }
-    
+
     signal(SIGTSTP, ctrl_z);
 }
 
@@ -135,8 +135,9 @@ int main()
     }
 
     load_history();
-    signal(SIGINT, ctrl_c);
     signal(SIGTSTP, ctrl_z);
+    signal(SIGINT, ctrl_c);
+    signal(SIGCHLD, handler);
     shell();
     return 0;
 }
