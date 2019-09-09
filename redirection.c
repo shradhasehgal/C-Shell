@@ -14,16 +14,26 @@ void redirection(char *command)
     char *output[2], *input[2];
     int saved_stdout = dup(STDOUT_FILENO);
     int saved_stdin = dup(STDIN_FILENO);
-    char * out = strstr(command, ">");
     char * in = strstr(command, "<");
-
+    char * out_file;
     output[0] = &command[0];
-    
+    int out_type = 0;
+    char * out = strstr(command, ">>");
     if(out != NULL)
+        out_type = 2;
+
+    else 
+    {
+        out = strstr(command, ">");
+        if(out != NULL)
+            out_type = 1;
+    }
+
+    if(out_type)
     { 
         output[0] = strtok(command, ">");
         output[1] = strtok(NULL, ">");
-        output[1] = strtok(output[1], " \r\t\n");
+        out_file = strtok(output[1], " \r\t\n");
     }
 
     input[0] = output[0];
@@ -64,15 +74,9 @@ void redirection(char *command)
         no_args++;
     }
 
-    int out_type = 0;
-    if(out != NULL)
+    if(out_type)
     {
-        out = strstr(command, ">>");
-        if(out != NULL)
-            out_type = 2;
-        else out_type = 1;
-
-        if(output[1] == NULL)
+        if(out_file == NULL)
         {
             printf("Enter output file\n");
             return;
@@ -104,22 +108,25 @@ void redirection(char *command)
         {
             int fd_out;
             if(out_type == 1)
-                fd_out = open(output[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                fd_out = open(out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
             else if(out_type == 2)
-                fd_out = open(output[1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+                fd_out = open(out_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 
             if(fd_out < 0)
                 perror("Output Redirection");
             
-            if(dup2(fd_out, 1) != 1) 
-                perror("Output Redirection - dup2 fail");
-        
+            dup2(fd_out, 1);         
             close(fd_out);
             
         }
 
-        execvp(args[0], args);
+        if (execvp(args[0], args) < 0) 
+        {     
+            perror("Command not found");
+            exit(EXIT_FAILURE);
+        }
+        
         dup2(saved_stdin, 0);
         close(saved_stdin);
         

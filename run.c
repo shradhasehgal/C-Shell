@@ -53,7 +53,7 @@ void run(char **args, int no_args, int bg)
 
      else if (pid == 0) 
      {   
-          //setpgid(0, 0);
+          setpgid(0, 0);
           if (execvp(args[0], args) < 0) 
           {     
                perror("Command not found");
