@@ -13,6 +13,43 @@
 #include "overkill.c"
 #include "bg.c"
 #include "fg.c"
+#include "redirection.c"
+
+int check_redirection(char *command)
+{
+    // int in = 0, out = 0;
+    // for(int i=0; i < no_args; i++)
+    // {
+    //     if(!strcmp(args[i], ">") || !strcmp(args[i], ">>"))
+    //         out = 1;
+    //     else if (!strcmp(args[i], "<"))
+    //         in = 1;
+    // }
+
+    // if(in && out)
+    //     return 3;
+    
+    // else if(out)
+    //     return 2;
+    
+    // else if(in)
+    //     return 1;
+
+    // else return 0;
+    char *out = strstr(command, ">");
+    char *in = strstr(command, "<");
+
+    if((out != NULL) && (in != NULL))
+        return 3;
+    
+    else if(out != NULL)
+        return 2;
+    
+    else if(in != NULL)
+        return 1;
+
+    else return 0;
+}
 
 void removeSpaces(char *str) 
 { 
@@ -80,6 +117,12 @@ void execute_com(char *command)
         strcpy(args[no_args], com);
         com = strtok(NULL, " \n\t\r");
         no_args++;
+    }
+
+    if(check_redirection(command))
+    {
+        redirection(command);
+        return;
     }
 
     command = strtok(command, " \n\t\r");

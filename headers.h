@@ -13,6 +13,8 @@
 #include <grp.h>
 #include <pwd.h>
 #include <sys/wait.h>
+#include<sys/types.h>
+#include <fcntl.h> 
 
 #define EXIT_FAILURE 1
 char HOST[1024], USER[1024], CWD[2048], HOME[2048];
