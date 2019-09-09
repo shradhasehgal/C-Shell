@@ -10,15 +10,20 @@ int isfile(char* path)
 
 void redirection(char *command)
 {
-    int status;
-    char *output[2], *input[2];
     int saved_stdout = dup(STDOUT_FILENO);
     int saved_stdin = dup(STDIN_FILENO);
-    char * in = strstr(command, "<");
-    char * out_file;
-    output[0] = &command[0];
+    int status;
+
+    char *output[2], *input[2];
+    char * out_file = NULL;
+    char * in_file = NULL;
+
+    char * inp = strstr(command, "<");
+    int in = !(inp == NULL);
+    //printf(" int is %d", in);
     int out_type = 0;
     char * out = strstr(command, ">>");
+    
     if(out != NULL)
         out_type = 2;
 
@@ -29,6 +34,8 @@ void redirection(char *command)
             out_type = 1;
     }
 
+    output[0] = &command[0];
+
     if(out_type)
     { 
         output[0] = strtok(command, ">");
@@ -37,16 +44,16 @@ void redirection(char *command)
     }
 
     input[0] = output[0];
-    if(in != NULL)
+    if(in)
     { 
         input[0] = strtok(input[0], "<");
         input[1] = strtok(NULL, "<");
     }
 
-    char **args = (char**)malloc(sizeof(char*) * 100);
+    char **args = (char**)malloc(sizeof(char*) * 300);
     int no_args = 0;
     
-    if(in != NULL)
+    if(in)
     {
         if(input[1] == NULL)
         {
@@ -54,14 +61,14 @@ void redirection(char *command)
             return;
         }
         
-        input[1] = strtok(input[1], " \n\r\t");
-        if(!isfile(input[1]))
+        //printf("\n fk no %s\n",input[1]);
+        in_file = strtok(input[1], " \n\r\t");
+        if(!isfile(in_file))
         {
             printf("File does not exist\n");
             return;
         }
-        // int fd_in = open(input[1], O_RDONLY);
-        // close(fd_in);
+    
     }
 
     input[0] = strtok(input[0], " \n\r\t");
@@ -74,6 +81,8 @@ void redirection(char *command)
         no_args++;
     }
 
+    args[no_args] = NULL;
+
     if(out_type)
     {
         if(out_file == NULL)
@@ -81,6 +90,8 @@ void redirection(char *command)
             printf("Enter output file\n");
             return;
         }
+
+        //printf("%s %d\n", out_file, out_type);
     }
 
     pid_t pid = fork();
@@ -89,18 +100,36 @@ void redirection(char *command)
         perror("Error in forking");
         return;
     }
-    
+
     if(pid == 0)
     {
-        if(in != NULL)
+        // for(int i=0; i < no_args; i++)
+        //     printf("%s ", args[i]);
+
+        // printf("%d\n", in);
+        // if(in)
+        // {
+        //     printf("wtaf");
+        //     printf("\n%s ", in_file);
+        // }
+        
+        // if(out_file)
+        //     printf("%s\n", out_file);
+
+        // printf("ffs %d\n", in);
+        if(in)
         {
-            int fd_in = open(input[1], O_RDONLY);
+            // printf("yo what");
+            // printf(" %s ", in_file);
+            // fflush(stdout);
+            int fd_in = open(in_file, O_RDONLY);
             if(fd_in < 0) 
-                perror("Input redirection");   
+            {
+                perror("Input redirection");
+                return;
+            }   
             
-            if(dup2(fd_in, 0) != 0) 
-                perror("Input redirection - dup2 fail");
-            
+            dup2(fd_in, 0);
             close(fd_in);
         }
 
@@ -114,13 +143,15 @@ void redirection(char *command)
                 fd_out = open(out_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 
             if(fd_out < 0)
+            {
                 perror("Output Redirection");
+                return;
+            }
             
             dup2(fd_out, 1);         
             close(fd_out);
-            
         }
-
+        
         if (execvp(args[0], args) < 0) 
         {     
             perror("Command not found");
@@ -132,10 +163,15 @@ void redirection(char *command)
         
         dup2(saved_stdout, 1);
         close(saved_stdout);
+        exit(0);
     }        
     
-    else while (wait(&status) != pid);
-    
+    else 
+    {
+        
+        while (wait(&status) != pid);
+    }
+
     for(int j=0; j < no_args; j++)
         free(args[j]);
     free(args);
