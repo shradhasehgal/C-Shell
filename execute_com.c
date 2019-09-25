@@ -36,96 +36,38 @@ char **pipe_elements(char *input)
 void piping(char *command)
 {
     char **pipe_args = pipe_elements(command);
-    int parr[2], fd = 0; pid_t newproc;
+    int pipes[2], fd = 0; pid_t proc;
 
     for(int j=0; pipe_args[j]!= NULL; j++)
     {
-        pipe(parr);
-        newproc = fork();
-        if(newproc==0)
+        pipe(pipes);
+        proc = fork();
+        
+        if(proc < 0) perror("Nash");
+        
+        else if(proc > 0)
+        {
+            wait(NULL);
+            close(pipes[1]);
+            fd = pipes[0];
+        }
+
+        else if(proc == 0)
         {
             dup2(fd , 0);
-            if(pipe_args[j+1]!=NULL) dup2(parr[1],1);
-            close(parr[0]);
+            
+            if(pipe_args[j+1]!=NULL) 
+                dup2(pipes[1],1);
+            
+            close(pipes[0]);
             execute_com(pipe_args[j]);
             exit(2);
         }
-        else
-        {
-            wait(NULL);
-            close(parr[1]);
-            fd = parr[0];
-        }
-    
     }
-}
-
-void spawn_proc (int in, int out, char *cmd)
-{
-  pid_t pid;
-
-  if ((pid = fork ()) == 0)
-    {
-      if (in != 0)
-        {
-          dup2 (in, 0);
-          close (in);
-        }
-
-      if (out != 1)
-        {
-          dup2 (out, 1);
-          close (out);
-        }
-
-      return execute_com(cmd);
-    }
-
-  return;
-}
-
-void fork_pipes (char *command)
-{
-    int i; pid_t pid;
-    int in, fd [2];
-    in = 0;
-    char **pipe_args = pipe_elements(command);
-    int j;
-    for(j=0; j <2; j++)
-    {
-        pipe (fd);
-        spawn_proc (in, fd [1], pipe_args[j]);
-        close (fd [1]);
-        in = fd [0];
-    }
-
-    if (in != 0)
-        dup2 (in, 0);
-
-    return execute_com(pipe_args[j]);
 }
 
 int check_redirection(char *command)
 {
-    // int in = 0, out = 0;
-    // for(int i=0; i < no_args; i++)
-    // {
-    //     if(!strcmp(args[i], ">") || !strcmp(args[i], ">>"))
-    //         out = 1;
-    //     else if (!strcmp(args[i], "<"))
-    //         in = 1;
-    // }
-
-    // if(in && out)
-    //     return 3;
-    
-    // else if(out)
-    //     return 2;
-    
-    // else if(in)
-    //     return 1;
-
-    // else return 0;
     char *out = strstr(command, ">");
     char *in = strstr(command, "<");
 
