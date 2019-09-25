@@ -163,14 +163,9 @@ void redirection(char *command)
         
         dup2(saved_stdout, 1);
         close(saved_stdout);
-        exit(0);
     }        
     
-    else 
-    {
-        
-        while (wait(&status) != pid);
-    }
+    else while (wait(&status) != pid);
 
     for(int j=0; j < no_args; j++)
         free(args[j]);

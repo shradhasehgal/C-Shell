@@ -15,6 +15,96 @@
 #include "fg.c"
 #include "redirection.c"
 
+void execute_com(char *command);
+
+char **pipe_elements(char *input)
+{
+    char *p = strtok (input, "|");
+    char **pipe_args = malloc(256 * sizeof(char *));
+
+    int oof = 0;
+
+    while (p != NULL)
+    {
+        pipe_args[oof++] = p;
+        p = strtok (NULL, "|");
+    }
+
+    return pipe_args;
+}
+
+void piping(char *command)
+{
+    char **pipe_args = pipe_elements(command);
+    int parr[2], fd = 0; pid_t newproc;
+
+    for(int j=0; pipe_args[j]!= NULL; j++)
+    {
+        pipe(parr);
+        newproc = fork();
+        if(newproc==0)
+        {
+            dup2(fd , 0);
+            if(pipe_args[j+1]!=NULL) dup2(parr[1],1);
+            close(parr[0]);
+            execute_com(pipe_args[j]);
+            exit(2);
+        }
+        else
+        {
+            wait(NULL);
+            close(parr[1]);
+            fd = parr[0];
+        }
+    
+    }
+}
+
+void spawn_proc (int in, int out, char *cmd)
+{
+  pid_t pid;
+
+  if ((pid = fork ()) == 0)
+    {
+      if (in != 0)
+        {
+          dup2 (in, 0);
+          close (in);
+        }
+
+      if (out != 1)
+        {
+          dup2 (out, 1);
+          close (out);
+        }
+
+      return execute_com(cmd);
+    }
+
+  return;
+}
+
+void fork_pipes (char *command)
+{
+    int i; pid_t pid;
+    int in, fd [2];
+    in = 0;
+    char **pipe_args = pipe_elements(command);
+    int j;
+    for(j=0; j <2; j++)
+    {
+        pipe (fd);
+        spawn_proc (in, fd [1], pipe_args[j]);
+        close (fd [1]);
+        in = fd [0];
+    }
+
+    if (in != 0)
+        dup2 (in, 0);
+
+    return execute_com(pipe_args[j]);
+}
+
 int check_redirection(char *command)
 {
     // int in = 0, out = 0;
@@ -46,6 +136,15 @@ int check_redirection(char *command)
         return 2;
     
     else if(in != NULL)
+        return 1;
+
+    else return 0;
+}
+
+int check_piping(char *command)
+{
+    char *is_pipe = strstr(command, "|");
+    if(is_pipe != NULL)
         return 1;
 
     else return 0;
@@ -117,6 +216,13 @@ void execute_com(char *command)
         strcpy(args[no_args], com);
         com = strtok(NULL, " \n\t\r");
         no_args++;
+    }
+
+    if(check_piping(command))
+    {
+        piping(command);
+        //fork_pipes(command);
+        return;
     }
 
     if(check_redirection(command))
