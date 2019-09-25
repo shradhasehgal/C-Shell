@@ -48,6 +48,37 @@ These commands have been defined by me and are contained within the shell itself
 
     - Exits the shell with return status as success, and adds updates [history.txt](history.text).
 
+6. `setenv var[value]` & `unset var`
+
+    - Creates an enviornmental variable `var` if it doesn't already exist and assigns it the value given
+    - `unset var` destroys that environmental variable
+
+7.  `jobs`
+
+    - Prints a list of all currently running jobs along with their pid in order of their creation
+    - Gives the state of the job – Running, Sleeping, Stopped or Defunct
+    - Implemented in [jobs.c](jobs.c)
+
+8. `kjob <jobNumber> <signalNumber>` 
+    
+    - Takes the job id of a running job and sends a signal value to that process
+    - Implemented in [kjob.c](kjob.c)
+
+9. `fg <jobNumber>`
+    
+    - Brings a running or a stopped background job with given job number to foreground.
+    - Implemented in [fg.c](fg.c)
+
+10. `bg <jobNumber>`
+
+    - Changes a stopped background job to a running background job.
+    - Implemented in [bg.c](bg.c)
+
+11. `overkill`
+
+    - ​ Kills all background process at once.
+    - Implemented in [overkill.c](overkill.c)
+
 ### Foreground and Background Processes
 
 - All other commands are treated as system commands like emacs, vim etc.
@@ -78,6 +109,30 @@ These commands have been defined by me and are contained within the shell itself
     - Executes every `n` number of seconds as specified by user.
     - Exits when symbol `q` is pressed.
     - Error handling done for incorrect arguments.
+
+
+## Additional Features
+
+1. `​ CTRL-Z`
+
+    - Changes the status of currently running job to stop, and pushes it to the background.
+
+2. `CTRL-C`
+
+    - Sends SIGINT signal to the current foreground job of the shell​.
+    - If there is no foreground job, then the signal does not have any effect.
+
+3. Command Recall using ‘UP’ arrow key
+
+    - ‘UP’ key with the ‘ENTER’ key causes a new prompt to be displayed with the previous command and then that command is
+executed. (similar to normal Ubuntu environment).
+    - Pressing ‘UP’ key ‘K’ times consecutively leads to the K​th ​ previous command getting executed.
+
+4. Input-Output Redirection & Piping
+
+    - Handles `<`, `>`, `>>`, and `|` operators appropriately, wherever they are in the command
+    - Throws error if syntax is incorrect
+     
 
 ### Coding style
 
