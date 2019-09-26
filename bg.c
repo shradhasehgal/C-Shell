@@ -11,8 +11,7 @@ void bg(char **args, int no_args)
         if (job_no > back_g)
             printf("Enter valid job number\n");
         
-        else kill(jobs[job_no].PID, SIGCONT);
-        
+        else kill(jobs[job_no-1].PID, SIGCONT);   
     }
     
 }
