@@ -138,6 +138,7 @@ int main()
     signal(SIGTSTP, ctrl_z);
     signal(SIGINT, ctrl_c);
     signal(SIGCHLD, handler);
+    // signal(SIGCHLD, handler2);
     shell();
     return 0;
 }

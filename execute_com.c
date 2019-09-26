@@ -17,6 +17,129 @@
 
 void execute_com(char *command);
 
+// void cron(char **args, int no_args)
+// {
+//     signal(SIGCHLD, SIG_DFL);
+//     int ti, total, note;
+//     if(no_args < 7)
+//         printf("Enter command in the form `cronjob -c ls -t 3 -p 6`");
+  
+//     else 
+//     {
+//         for(int i=0; i < no_args; i++)
+//         {
+//             if(strcmp(args[i],"-c") == 0)
+//                 note = i+1;
+
+//             else if(strcmp(args[i],"-t") == 0)
+//                 ti = atoi(args[i+1]);
+
+//             else if(strcmp(args[i],"-p") == 0)
+//                 total = atoi(args[i+1]);
+//         }
+    
+//         no_args -= 6;
+
+//         for(int i=0; i < no_args; i++)
+//             args[i] = args[i+note];
+
+//         args[no_args] = NULL;
+//     } 
+
+//     int status;
+//     pid_t pid = fork(), wpid;
+//     args[no_args] = NULL;
+
+//     int number_exec = total / ti, iter = 0;
+//     if (pid < 0) 
+//     {    
+//         perror("Error");
+//         exit(EXIT_FAILURE);
+//     }
+
+//     else if (pid == 0) 
+//     {
+//         char *str = malloc(1000* sizeof(char));
+//         strcpy(str, args[0]);
+//         for(int i=1; args[i] != NULL; i++)
+//         {
+//             strcat(str, args[i]);
+//         }
+
+//         while(iter < number_exec)
+//         {
+//             sleep(ti);
+//             execute_com(str);
+//             iter++;
+//         }
+
+//         free(str);
+//         return;   
+//     }
+
+//     else
+//     {
+//         fflush(stdout);
+//     }
+
+    
+// }
+
+
+void cron(char **args, int no_args)
+{
+    int ti, total, note;
+    if(no_args < 7)
+        printf("Enter command in the form `cronjob -c ls -t 3 -p 6`");
+  
+    else 
+    {
+        for(int i=0; i < no_args; i++)
+        {
+            if(strcmp(args[i],"-c") == 0)
+                note = i+1;
+
+            else if(strcmp(args[i],"-t") == 0)
+                ti = atoi(args[i+1]);
+
+            else if(strcmp(args[i],"-p") == 0)
+                total = atoi(args[i+1]);
+        }
+    
+        no_args -= 6;
+
+        for(int i=0; i < no_args; i++)
+            args[i] = args[i+note];
+
+        args[no_args] = NULL;
+    } 
+    
+    int repeat = total / ti;
+    pid_t pid = fork();
+    if (pid == 0)
+    {
+        char *str = malloc(1000* sizeof(char));
+        strcpy(str, args[0]);
+
+        for(int i=1; args[i] != NULL; i++)
+            strcat(str, args[i]);
+        
+        while (repeat > 0)
+        {
+            repeat--;
+            sleep(ti);
+            execute_com(str);
+            prompt();
+            fflush(stdout);
+        }
+
+        free(str);
+
+        exit(0);
+    } 
+    
+}
+
 char **pipe_elements(char *input)
 {
     char *p = strtok (input, "|");
@@ -187,6 +310,9 @@ void execute_com(char *command)
     else if(!strcmp(args[0], "fg"))
         fg(args, no_args);
 
+    else if(!strcmp(args[0], "cronjob"))
+        cron(args, no_args);
+
     else if(!strcmp(args[no_args-1], "&"))
     {
         args[no_args-1] = NULL;
@@ -239,7 +365,7 @@ void execute_com(char *command)
 
     else run(args, no_args, 0);
     
-    for(int j=0; j < no_args; j++)
+    for(int j=0; j < no_args && args[j]!=NULL; j++)
         free(args[j]);
 
         free(com2);

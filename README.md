@@ -1,4 +1,4 @@
-# Linux Shell in C
+# Nash - Linux Shell in C
 
 ## Introduction
 
@@ -110,10 +110,14 @@ These commands have been defined by me and are contained within the shell itself
     - Exits when symbol `q` is pressed.
     - Error handling done for incorrect arguments.
 
+5. `cronjob -c [command] -t [time_period] -p [duration]`
+
+    - Runs the command every t seconds until p time gets over.
+    - Cron runs in the background so you can continue using the shell whilst the command is executed periodically
 
 ## Additional Features
 
-1. `​ CTRL-Z`
+1. `​CTRL-Z`
 
     - Changes the status of currently running job to stop, and pushes it to the background.
 
@@ -132,7 +136,7 @@ executed. (similar to normal Ubuntu environment).
 
     - Handles `<`, `>`, `>>`, and `|` operators appropriately, wherever they are in the command
     - Throws error if syntax is incorrect
-     
+
 
 ### Coding style
 
