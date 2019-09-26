@@ -72,26 +72,6 @@ void shell()
     } while(1);
 }
 
-void ctrl_z(int signum)
-{
-    pid_t p = getpid();
-    if(p < 0)
-        perror("Error");
-    
-    else if (p != SHELL_ID)
-        return;
-
-    if (CHILD_ID != -1)
-    {
-        kill(CHILD_ID, SIGTTIN);	
-		kill(CHILD_ID, SIGTSTP);
-        strcpy(jobs[back_g].job_name, CURR_JOB);
-        jobs[back_g].PID = CHILD_ID;
-        back_g++;
-    }
-
-    signal(SIGTSTP, ctrl_z);
-}
 
 void ctrl_c(int signum)
 {
@@ -135,7 +115,7 @@ int main()
     }
 
     load_history();
-    signal(SIGTSTP, ctrl_z);
+    //signal(SIGTSTP, ctrl_z);
     signal(SIGINT, ctrl_c);
     signal(SIGCHLD, handler);
     // signal(SIGCHLD, handler2);

@@ -1,5 +1,31 @@
 #include "headers.h"
 
+
+// void ctrl_z(int signum)
+// {
+//      //printf("yeeett0");
+//     pid_t p = getpid();
+    
+//     if(p < 0)
+//         perror("Error");
+    
+//     else if (p != SHELL_ID)
+//         return;
+
+//     if (CHILD_ID != -1)
+//     {
+//         printf("yeet");
+//         fflush(stdout);
+//         // kill(CHILD_ID, SIGTTIN);	
+//         kill(CHILD_ID, SIGTSTP);
+//         strcpy(jobs[back_g].job_name, CURR_JOB);
+//         jobs[back_g].PID = CHILD_ID;
+//         back_g++;
+//     }
+
+//     signal(SIGTSTP, ctrl_z);
+// }
+
 void shift(int i)
 {
      for(int j=i; j < back_g-1; j++)
@@ -73,30 +99,38 @@ void run(char **args, int no_args, int bg)
                     strcat(CURR_JOB, args[i]);
                }
 
-               signal(SIGTTOU, SIG_IGN);
                signal(SIGTTIN, SIG_IGN);
+               signal(SIGTTOU, SIG_IGN);
+               
                tcsetpgrp(STDIN_FILENO, pid);
+               
+               //signal(SIGTSTP, ctrl_z);
                wpid = waitpid(pid, &status, WUNTRACED);
+               
                tcsetpgrp(STDIN_FILENO, getpgrp());
-               signal(SIGTTOU, SIG_DFL);
+               
                signal(SIGTTIN, SIG_DFL);
+               signal(SIGTTOU, SIG_DFL);
+
+               if(WIFSTOPPED(status))
+               {
+                    printf("%s with PID %d suspended\n", CURR_JOB, pid);
+                    strcpy(jobs[back_g].job_name, CURR_JOB);
+                    jobs[back_g].PID = CHILD_ID;
+                    back_g++;
+               }
           }
 
           else
           {
-               // signal(SIGCHLD, handler);
-               //jobs[back_g].job_name = malloc(sizeof(char) * strlen(args[0] + 2));
                strcpy(jobs[back_g].job_name, args[0]);
                
-               //printf("%d\n",no_args);
                for(int i = 1; i < no_args-1; i++)
                {
-                    // printf("%s\n", args[i]);
                     strcat(jobs[back_g].job_name, " ");
                     strcat(jobs[back_g].job_name, args[i]);
                }
 
-               //jobs[back_g].job_name[strlen(args[0])]='\0';
                jobs[back_g].PID = pid;
                back_g++;
                printf("[%d] %d\n", back_g, pid);
