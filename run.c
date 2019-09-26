@@ -73,7 +73,13 @@ void run(char **args, int no_args, int bg)
                     strcat(CURR_JOB, args[i]);
                }
 
+               signal(SIGTTOU, SIG_IGN);
+               signal(SIGTTIN, SIG_IGN);
+               tcsetpgrp(STDIN_FILENO, pid);
                wpid = waitpid(pid, &status, WUNTRACED);
+               tcsetpgrp(STDIN_FILENO, getpgrp());
+               signal(SIGTTOU, SIG_DFL);
+               signal(SIGTTIN, SIG_DFL);
           }
 
           else

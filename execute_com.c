@@ -17,75 +17,6 @@
 
 void execute_com(char *command);
 
-// void cron(char **args, int no_args)
-// {
-//     signal(SIGCHLD, SIG_DFL);
-//     int ti, total, note;
-//     if(no_args < 7)
-//         printf("Enter command in the form `cronjob -c ls -t 3 -p 6`");
-  
-//     else 
-//     {
-//         for(int i=0; i < no_args; i++)
-//         {
-//             if(strcmp(args[i],"-c") == 0)
-//                 note = i+1;
-
-//             else if(strcmp(args[i],"-t") == 0)
-//                 ti = atoi(args[i+1]);
-
-//             else if(strcmp(args[i],"-p") == 0)
-//                 total = atoi(args[i+1]);
-//         }
-    
-//         no_args -= 6;
-
-//         for(int i=0; i < no_args; i++)
-//             args[i] = args[i+note];
-
-//         args[no_args] = NULL;
-//     } 
-
-//     int status;
-//     pid_t pid = fork(), wpid;
-//     args[no_args] = NULL;
-
-//     int number_exec = total / ti, iter = 0;
-//     if (pid < 0) 
-//     {    
-//         perror("Error");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     else if (pid == 0) 
-//     {
-//         char *str = malloc(1000* sizeof(char));
-//         strcpy(str, args[0]);
-//         for(int i=1; args[i] != NULL; i++)
-//         {
-//             strcat(str, args[i]);
-//         }
-
-//         while(iter < number_exec)
-//         {
-//             sleep(ti);
-//             execute_com(str);
-//             iter++;
-//         }
-
-//         free(str);
-//         return;   
-//     }
-
-//     else
-//     {
-//         fflush(stdout);
-//     }
-
-    
-// }
-
-
 void cron(char **args, int no_args)
 {
     int ti, total, note;
@@ -113,7 +44,7 @@ void cron(char **args, int no_args)
 
         args[no_args] = NULL;
     } 
-    
+
     int repeat = total / ti;
     pid_t pid = fork();
     if (pid == 0)
@@ -334,6 +265,7 @@ void execute_com(char *command)
     else if(strcmp(command, "quit") == 0)
     {
         write_history();
+        overkill();
         printf("\033[1;35m\n*** Goodbye, %s ***\n\033[0m", USER);
         printf("\n*** Nash Out ~(˘▾˘~) ***\n\n");
         exit(EXIT_SUCCESS);
