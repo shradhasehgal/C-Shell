@@ -17,7 +17,7 @@ void fg(char **args, int no_args)
 	pid = jobs[job_no-1].PID;
 	strcpy(CURR_JOB, jobs[job_no-1].job_name);
 	CHILD_ID = pid;
-	shift(job_no);
+	shift(job_no-1);
 	signal(SIGTTIN, SIG_IGN); signal(SIGTTOU, SIG_IGN); tcsetpgrp(STDIN_FILENO, CHILD_ID); 
 	kill(pid, SIGCONT);
 	waitpid(pid, &status, WUNTRACED);
@@ -26,7 +26,7 @@ void fg(char **args, int no_args)
 
 	if(WIFSTOPPED(status))
 	{
-		printf("%s with PID %d suspended\n", CURR_JOB, CHILD_ID );
+		printf("%s with PID %d suspended\n", CURR_JOB, CHILD_ID);
 		strcpy(jobs[back_g].job_name, CURR_JOB);
         jobs[back_g].PID = CHILD_ID;
         back_g++;

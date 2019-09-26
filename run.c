@@ -43,22 +43,25 @@ void handler(int sig)
 
      if(pid > 0)
      {
-          char str[200];
+          char str[200]; int f =0;
           for(int i=0; i < back_g; i++)
           {
                if(jobs[i].PID == pid)
                {
+
                     strcpy(str, jobs[i].job_name);
-                    shift(i);      
+                    shift(i);
+                    f = 1;      
                     break;
                }
           }
 
-          if(WEXITSTATUS(x) == 0 && WIFEXITED(x))
+          if(WEXITSTATUS(x) == 0 && WIFEXITED(x) && f)
           fprintf(stderr,"\033[1;31m\n%s with PID %d exited normally\n\033[0m", str, pid);
      
-          else fprintf(stderr,"\033[1;31m\n%s with PID %d failed to exit normally\n\033[0m",str, pid);
-          prompt();
+          else if(f) fprintf(stderr,"\033[1;31m\n%s with PID %d failed to exit normally\n\033[0m",str, pid);
+          
+          if(f) prompt();
           fflush(stdout);
      }
      

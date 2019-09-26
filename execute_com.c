@@ -50,13 +50,15 @@ void cron(char **args, int no_args)
     if (pid == 0)
     {
         char *str = malloc(1000* sizeof(char));
-        strcpy(str, args[0]);
-
-        for(int i=1; args[i] != NULL; i++)
-            strcat(str, args[i]);
-        
+        // printf("%s\n", str);
         while (repeat > 0)
         {
+            strcpy(str, args[0]);
+            for(int i=1; args[i] != NULL; i++)
+            {
+                strcat(str, " ");
+                strcat(str, args[i]);
+            }
             repeat--;
             sleep(ti);
             execute_com(str);
