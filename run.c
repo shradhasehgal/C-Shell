@@ -103,15 +103,12 @@ void run(char **args, int no_args, int bg)
                }
 
                signal(SIGTTIN, SIG_IGN);
+
                signal(SIGTTOU, SIG_IGN);
-               
                tcsetpgrp(STDIN_FILENO, pid);
-               
                //signal(SIGTSTP, ctrl_z);
                wpid = waitpid(pid, &status, WUNTRACED);
-               
                tcsetpgrp(STDIN_FILENO, getpgrp());
-               
                signal(SIGTTIN, SIG_DFL);
                signal(SIGTTOU, SIG_DFL);
 
